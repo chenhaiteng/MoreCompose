@@ -61,7 +61,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.github.chenhaiteng"
             artifactId = "MoreCompose"
-            version = "0.0.1"
+            version = "0.0.3"
 
             afterEvaluate {
                 from(components["release"])
