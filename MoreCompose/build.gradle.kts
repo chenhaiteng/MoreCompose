@@ -50,6 +50,8 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.tooling)
     implementation(libs.androidx.compose.animation)
+    implementation(libs.androidx.foundation)
+    implementation(libs.material3)
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
