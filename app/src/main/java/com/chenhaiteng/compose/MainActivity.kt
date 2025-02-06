@@ -13,6 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.MoreIconButton
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.cubicTo
 import androidx.compose.ui.geometry.fitSquare
@@ -43,7 +47,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MoreComposeTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(modifier = Modifier.fillMaxSize(), bottomBar = {
+                    BottomAppBar {
+                        MoreIconButton(imageVector = Icons.Filled.Settings) { }
+                    }
+                }) { innerPadding ->
                     MoreComposeCanvas(Modifier.fillMaxSize().padding(innerPadding)) {
 
                     }
