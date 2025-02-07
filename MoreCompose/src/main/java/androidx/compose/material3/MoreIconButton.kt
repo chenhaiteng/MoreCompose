@@ -6,6 +6,7 @@
 package androidx.compose.material3
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.size
@@ -22,7 +23,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun MoreIconButton(modifier: Modifier = Modifier.size(48.dp), @DrawableRes iconRes: Int, contentDescription: String = "icon button of more compose", tint:Color = Color.White, onLongClick: () -> Unit = {}, onClick: ()->Unit) {
+internal fun LongClickableWrapper(onClick: ()->Unit, onLongClick: ()->Unit, block: @Composable (InteractionSource)-> Unit) {
     val interactionSource = remember { MutableInteractionSource() }
     val viewConfiguration = LocalViewConfiguration.current
     LaunchedEffect(interactionSource) {
@@ -37,54 +38,48 @@ fun MoreIconButton(modifier: Modifier = Modifier.size(48.dp), @DrawableRes iconR
                 is PressInteraction.Release -> {
                     if (isLongClick) {
                         onLongClick()
+                    } else {
+                        onClick()
                     }
                 }
             }
         }
     }
-    IconButton(
-        modifier = modifier,
-        onClick = onClick,
-        interactionSource = interactionSource) {
-        Icon(
-            painter = painterResource(id = iconRes),
-            contentDescription = contentDescription,
-            modifier = Modifier.size(28.dp),
-            tint = tint
-        )
+    block(interactionSource)
+}
+
+@Composable
+fun MoreIconButton(modifier: Modifier = Modifier.size(48.dp), @DrawableRes iconRes: Int, contentDescription: String = "icon button of more compose", tint:Color = Color.White, onLongClick: () -> Unit = {}, onClick: ()->Unit) {
+    LongClickableWrapper(onClick, onLongClick) { interactionSource ->
+        IconButton(
+            modifier = modifier,
+            onClick = { },
+            interactionSource = interactionSource as MutableInteractionSource?
+        ) {
+            Icon(
+                painter = painterResource(id = iconRes),
+                contentDescription = contentDescription,
+                modifier = Modifier.size(28.dp),
+                tint = tint
+            )
+        }
     }
 }
 
 @Composable
 fun MoreIconButton(modifier: Modifier = Modifier.size(48.dp), imageVector: ImageVector, contentDescription: String = "icon button of more compose", tint:Color = Color.White, onLongClick: () -> Unit = {}, onClick: ()->Unit) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val viewConfiguration = LocalViewConfiguration.current
-    LaunchedEffect(interactionSource) {
-        var isLongClick = false
-        interactionSource.interactions.collectLatest { interaction ->
-            when (interaction) {
-                is PressInteraction.Press -> {
-                    isLongClick = false
-                    delay(viewConfiguration.longPressTimeoutMillis)
-                    isLongClick = true
-                }
-                is PressInteraction.Release -> {
-                    if (isLongClick) {
-                        onLongClick()
-                    }
-                }
-            }
+    LongClickableWrapper(onClick, onLongClick) { interactionSource ->
+        IconButton(
+            modifier = modifier,
+            onClick = { },
+            interactionSource = interactionSource as MutableInteractionSource?
+        ) {
+            Icon(
+                imageVector,
+                contentDescription = contentDescription,
+                modifier = Modifier.size(28.dp),
+                tint = tint
+            )
         }
-    }
-    IconButton(
-        modifier = modifier,
-        onClick = onClick,
-        interactionSource = interactionSource) {
-        Icon(
-            imageVector,
-            contentDescription = contentDescription,
-            modifier = Modifier.size(28.dp),
-            tint = tint
-        )
     }
 }

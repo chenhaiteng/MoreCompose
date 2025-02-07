@@ -43,7 +43,11 @@ class MainActivity : ComponentActivity() {
             MoreComposeTheme {
                 Scaffold(modifier = Modifier.fillMaxSize(), bottomBar = {
                     BottomAppBar {
-                        MoreIconButton(imageVector = Icons.Filled.Settings) { }
+                        MoreIconButton(imageVector = Icons.Filled.Settings, onLongClick = {
+                            println("long click")
+                        }) {
+                            println("click")
+                        }
                     }
                 }) { innerPadding ->
                     MoreComposeCanvas(Modifier.fillMaxSize().padding(innerPadding)) {
